@@ -9,7 +9,7 @@ const Base = ({
 }) => {
   return (
     <div>
-      <Menu></Menu>
+      <Menu />
       <div className="container-fluid">
         <div className="jumbotron bg-dark text-white text-center">
           <h2 className="display-4"> {title}</h2>
@@ -23,9 +23,6 @@ const Base = ({
           <button className="btn btn-warning btn-lg">Contact Us</button>
         </div>
       </footer>
-      <div className="container">
-        <span className="text-mutad">Shopping is fun</span>
-      </div>
     </div>
   );
 };
