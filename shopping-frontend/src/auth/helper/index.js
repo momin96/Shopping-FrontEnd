@@ -21,7 +21,7 @@ export const signup = (user) => {
 export const signin = (user) => {
   return fetch(`${BASEURL}/signin`, {
     method: "POST",
-    header: {
+    headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },

@@ -50,6 +50,40 @@ const Signup = () => {
       });
   };
 
+  const errorMessage = () => {
+    return (
+      <div
+        className="alert alert-danger"
+        style={{ display: error ? "" : "none" }}
+      >
+        {error}
+      </div>
+    );
+  };
+
+  const successMessage = () => {
+    return (
+      <div
+        className="alert alert-success"
+        style={{ display: success ? "" : "none" }}
+      >
+        Your account created successfully, Click{" "}
+        <Link to="/signin"> Here to Login </Link>
+      </div>
+    );
+  };
+
+  const showMessage = () => {
+    return (
+      <div className="row">
+        <div className="col-md-6 offset-sm-3 text-left">
+          {errorMessage()}
+          {successMessage()}
+        </div>
+      </div>
+    );
+  };
+
   const signupForm = () => {
     return (
       <div className="row">
@@ -87,40 +121,6 @@ const Signup = () => {
             </button>
             <p className="text-white text-center">{JSON.stringify(values)}</p>
           </form>
-        </div>
-      </div>
-    );
-  };
-
-  const errorMessage = () => {
-    return (
-      <div
-        className="alert alert-danger"
-        style={{ display: error ? "" : "none" }}
-      >
-        {error}
-      </div>
-    );
-  };
-
-  const successMessage = () => {
-    return (
-      <div
-        className="alert alert-success"
-        style={{ display: success ? "" : "none" }}
-      >
-        Your account created successfully, Click{" "}
-        <Link to="/signin"> Here to Login </Link>
-      </div>
-    );
-  };
-
-  const showMessage = () => {
-    return (
-      <div className="row">
-        <div className="col-md-6 offset-sm-3 text-left">
-          {errorMessage()}
-          {successMessage()}
         </div>
       </div>
     );
