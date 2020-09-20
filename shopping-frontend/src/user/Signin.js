@@ -8,8 +8,8 @@ export default function Signin() {
   //
 
   const [values, setValues] = useState({
-    email: "",
-    password: "",
+    email: "nasir@mmin.com",
+    password: "12345",
     error: "",
     loading: false,
     didRedirect: false,
@@ -55,15 +55,17 @@ export default function Signin() {
   const performRedirect = () => {
     if (didRedirect) {
       if (user && user.role === 1) {
-        return <p>Redirected to Admin</p>;
+        return <Redirect to="/admin/dashboard" />;
       } else {
-        return <p> Redirect to User dashboard</p>;
+        return <Redirect to="/user/dashboard" />;
       }
     }
-    // if (isAuthenticated()) {
-    //   return <Redirect to="/" />;
-    // }
+
+    if (isAuthenticated()) {
+      return <Redirect to="/" />;
+    }
   };
+
   const handleChanges = (changedField) => (event) => {
     setValues({ ...values, [changedField]: event.target.value });
   };
