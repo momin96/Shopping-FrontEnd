@@ -1,7 +1,12 @@
 import React, { Fragment } from "react";
 import { Link, withRouter } from "react-router-dom";
 
-import { signout, isAuthenticated } from "../auth/helper";
+import {
+  signout,
+  isAuthenticated,
+  isAdmin,
+  isRegularUser,
+} from "../auth/helper";
 
 const currentTab = (history, path) => {
   if (history.location.pathname === path) {
@@ -29,24 +34,28 @@ const Menu = ({ history }) => {
             Cart
           </Link>
         </li>
-        <li className="nav-item">
-          <Link
-            style={currentTab(history, "/user/dashboard")}
-            className="nav-link"
-            to="/user/dashboard"
-          >
-            User Dashboard
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link
-            style={currentTab(history, "/admin/dashboard")}
-            className="nav-link"
-            to="/admin/dashboard"
-          >
-            Admin Dashboard
-          </Link>
-        </li>
+        {isAuthenticated() && isRegularUser() && (
+          <li className="nav-item">
+            <Link
+              style={currentTab(history, "/user/dashboard")}
+              className="nav-link"
+              to="/user/dashboard"
+            >
+              User Dashboard
+            </Link>
+          </li>
+        )}
+        {isAuthenticated() && isAdmin() && (
+          <li className="nav-item">
+            <Link
+              style={currentTab(history, "/admin/dashboard")}
+              className="nav-link"
+              to="/admin/dashboard"
+            >
+              Admin Dashboard
+            </Link>
+          </li>
+        )}
         {!isAuthenticated() && (
           <Fragment>
             <li className="nav-item">

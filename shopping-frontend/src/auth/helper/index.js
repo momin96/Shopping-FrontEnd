@@ -70,3 +70,21 @@ export const isAuthenticated = () => {
     return false;
   }
 };
+
+export const isAdmin = () => {
+  let auth = isAuthenticated();
+  if (auth) {
+    return auth.user.role === 1;
+  } else {
+    return false;
+  }
+};
+
+export const isRegularUser = () => {
+  let auth = isAuthenticated();
+  if (auth) {
+    return auth.user.role === 0;
+  }
+
+  return false;
+};

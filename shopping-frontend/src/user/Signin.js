@@ -5,8 +5,6 @@ import { Link, Redirect } from "react-router-dom";
 import { isAuthenticated, signin, authenticate } from "../auth/helper";
 
 export default function Signin() {
-  //
-
   const [values, setValues] = useState({
     email: "nasir@mmin.com",
     password: "12345",
