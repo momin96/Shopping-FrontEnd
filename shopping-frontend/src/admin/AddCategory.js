@@ -13,11 +13,9 @@ const AddCategory = () => {
 
   const goBack = () => {
     return (
-      <div className="mt-5">
-        <Link className="btn btn-sm btn-success mb-3" to="/admin/dashboard">
-          Go to Dashboard
-        </Link>
-      </div>
+      <Link className="btn btn-sm btn-success mb-3" to="/admin/dashboard">
+        Go to Dashboard
+      </Link>
     );
   };
 
@@ -33,11 +31,12 @@ const AddCategory = () => {
 
     // Backend Request fire
 
-    createCategory(user._id, token, { categoryName })
+    createCategory(user._id, token, { name: categoryName })
       .then((data) => {
+        console.log(data);
         if (data.error) {
+          setError(data.error);
           setSuccess(false);
-          setError(error);
         } else {
           setError("");
           setSuccess(true);
@@ -65,17 +64,21 @@ const AddCategory = () => {
             onChange={handleChanges}
             value={categoryName}
           />
-          <button className="btn btn-outline-info" onClick={onSubmit}>
-            Create Category
-          </button>
         </div>
+        <button className="btn btn-outline-info mb-3" onClick={onSubmit}>
+          Create Category
+        </button>
       </form>
     );
   };
 
   const errorMessage = () => {
     if (error) {
-      return <h4 className="text-warning">Error in category creation</h4>;
+      return (
+        <h4 className="text-warning">
+          Error in category creation with Error: {error}
+        </h4>
+      );
     }
   };
 
@@ -92,7 +95,7 @@ const AddCategory = () => {
       className="container bg-info p-4"
     >
       <div className="row bg-white rounded">
-        <div className="col-8 offset-md-2">
+        <div className="col-8 offset-md-2 mt-4">
           {successMessage()}
           {errorMessage()}
           {categoryForm()}
