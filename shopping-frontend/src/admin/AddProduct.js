@@ -111,7 +111,6 @@ const AddProduct = () => {
     const value =
       fieldName === "photo" ? event.target.files[0] : event.target.value;
     formData.set(fieldName, value);
-    console.log("fieldName Data ", fieldName);
     setValues({ ...values, [fieldName]: event.target.value });
   };
 
@@ -182,6 +181,7 @@ const AddProduct = () => {
             name="photo"
             accept="image"
             placeholder="Choose a file"
+            onChange={handleChanges("photo")}
           />
         </div>
 
