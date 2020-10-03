@@ -2,19 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../auth/helper";
 import Base from "../core/Base";
-import { getCategories } from "./helper/adminapicall";
+import { createProduct, getCategories } from "./helper/adminapicall";
 
 const AddProduct = () => {
   const { user, token } = isAuthenticated();
 
   const [values, setValues] = useState({
-    productName: "Apple",
-    productDescription: "Its a delicious Fruit",
-    productPrice: "12",
-    productStock: "30",
+    name: "Apple",
+    description: "Its a delicious Fruit",
+    price: "12",
+    stock: "30",
     photo: "",
     productCategories: [],
-    selectedCategory: "",
+    category: "",
     loading: false,
     error: "",
     createdProduct: "",
@@ -23,12 +23,12 @@ const AddProduct = () => {
   });
 
   const {
-    productName,
-    productDescription,
-    productPrice,
-    productStock,
+    name,
+    description,
+    price,
+    category,
+    stock,
     productCategories,
-    selectedCategory,
     loading,
     error,
     createdProduct,
@@ -64,16 +64,54 @@ const AddProduct = () => {
     );
   };
 
+  const successMessage = () => {
+    return (
+      <div
+        className="alert alert-success mt-3"
+        style={{ display: createdProduct ? "" : "none" }}
+      >
+        <h4> Product create successfully</h4>
+      </div>
+    );
+  };
+
+  const errorMessage = () => {
+    return (
+      <div
+        className="alert alert-warning mt-3"
+        style={{ display: error ? "" : "none" }}
+      >
+        <h4>Error: {JSON.stringify(error)}</h4>
+      </div>
+    );
+  };
+
   const onSubmit = (e) => {
-    //
+    e.preventDefault();
+    setValues({ ...values, error: "", loading: true });
+    createProduct(user, token, formData).then((data) => {
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setValues({
+          ...values,
+          name: "",
+          description: "",
+          price: "",
+          stock: "",
+          category: "",
+          loading: false,
+          createdProduct: data.name,
+        });
+      }
+    });
   };
 
   const handleChanges = (fieldName) => (event) => {
     const value =
-      fieldName === "photo" ? event.target.file[0] : event.target.value;
-
-    formData.set((fieldName, value));
-
+      fieldName === "photo" ? event.target.files[0] : event.target.value;
+    formData.set(fieldName, value);
+    console.log("fieldName Data ", fieldName);
     setValues({ ...values, [fieldName]: event.target.value });
   };
 
@@ -84,8 +122,8 @@ const AddProduct = () => {
           <input
             type="text"
             className="form-control"
-            onChange={handleChanges("productName")}
-            value={productName}
+            onChange={handleChanges("name")}
+            value={name}
             placeholder="Enter Name here"
           />
         </div>
@@ -94,8 +132,8 @@ const AddProduct = () => {
           <input
             type="text"
             className="form-control"
-            onChange={handleChanges("productDescription")}
-            value={productDescription}
+            onChange={handleChanges("description")}
+            value={description}
             placeholder="Enter Description here"
           />
         </div>
@@ -104,14 +142,19 @@ const AddProduct = () => {
           <input
             type="text"
             className="form-control"
-            onChange={handleChanges("productPrice")}
-            value={productPrice}
+            onChange={handleChanges("price")}
+            value={price}
             placeholder="Enter Price"
           />
         </div>
 
         <div className="form-group">
-          <select placeholder="Category" className="form-control">
+          <select
+            placeholder="Category"
+            className="form-control"
+            onChange={handleChanges("category")}
+            value={category}
+          >
             <option value="">Select</option>
             {productCategories &&
               productCategories.map((category, index) => (
@@ -126,8 +169,8 @@ const AddProduct = () => {
           <input
             type="text"
             className="form-control"
-            onChange={handleChanges("productStock")}
-            value={productStock}
+            onChange={handleChanges("stock")}
+            value={stock}
             placeholder="Enter Product Quantity"
           />
         </div>
@@ -157,6 +200,8 @@ const AddProduct = () => {
     >
       <div className="row bg-white rounded">
         <div className="col-8 offset-md-2 mt-4">
+          {successMessage()}
+          {errorMessage()}
           {createProductForm()}
           {goBack()}
         </div>
