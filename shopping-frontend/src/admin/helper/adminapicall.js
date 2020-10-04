@@ -27,8 +27,8 @@ export const getCategories = () => {
     method: "GET",
   })
     .then((response) => {
-      console.log("response ", response);
-      return response.json();
+      let jsonData = response.json();
+      return jsonData;
     })
     .catch((error) => console.log(error));
 };
@@ -55,7 +55,11 @@ export const createProduct = (user, token, product) => {
 export const getAllProducts = () => {
   return fetch(`${BASEURL}/products`, {
     method: "GET",
-  });
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => console.log("Error in Get app Products ", error));
 };
 
 // Get Single product
@@ -75,13 +79,15 @@ export const updateProduct = (productId, userId, token, product) => {
     method: "PUT",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json",
+      //"Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
     body: product,
   })
     .then((response) => {
-      return response.json();
+      let jsonResponse = response.json();
+      console.log("jsonResponse ", jsonResponse);
+      return jsonResponse;
     })
     .catch((error) => console.log(error));
 };
