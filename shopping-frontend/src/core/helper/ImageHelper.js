@@ -10,18 +10,19 @@ const ImageHelper = ({ product }) => {
   //   : "https://images.pexels.com/photos/3561339/pexels-photo-3561339.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
 
   useEffect(() => {
-    if (product) {
-      fetchImage();
-    } else {
-      setPhoto(
-        "https://images.pexels.com/photos/3561339/pexels-photo-3561339.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-      );
-    }
+    // if (product) {
+    //   fetchImage();
+    // } else {
+    setPhoto(
+      "https://images.pexels.com/photos/3561339/pexels-photo-3561339.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+    );
+    // }
   }, []);
 
   const [photo, setPhoto] = useState("");
 
   const fetchImage = () => {
+    // TODO: Need to work on fetching of product image
     getProductImage(product._id).then((data) => {
       //console.log("image Data ", data);
       // let imageURL = URL.createObjectURL(data);

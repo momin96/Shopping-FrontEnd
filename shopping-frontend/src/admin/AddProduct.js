@@ -8,10 +8,10 @@ const AddProduct = () => {
   const { user, token } = isAuthenticated();
 
   const [values, setValues] = useState({
-    name: "Apple",
-    description: "Its a delicious Fruit",
-    price: "12",
-    stock: "30",
+    name: "",
+    description: "",
+    price: "",
+    stock: "",
     photo: "",
     productCategories: [],
     category: "",
