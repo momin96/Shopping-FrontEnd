@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import ReactStripeCheckout from 'react-stripe-checkout'
+import { BASEURL } from "../constants";
+
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../auth/helper";
 import { loadCart, performEmptyCart } from "./helper/CartHelper";
+import { createOrder } from './helper/OrderHelper'
 
 const StripeCheckout = ({
   products,
@@ -15,30 +19,74 @@ const StripeCheckout = ({
     address: "",
   });
 
-  const { token, user } = isAuthenticated();
+
+  const authToken = isAuthenticated() && isAuthenticated().token
 
   const getFinalAmount = () => {
     let amount = products.reduce((currentValue, product) => {
       return currentValue + product.price;
     }, 0);
-
-    // products.map((p) => {
-    //   amount += p.price;
-    // });
     return amount;
   };
 
+  const makePayment = (token) => {
+    const body = {
+      token,
+      products
+    }
+
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    }
+
+    return fetch(`${BASEURL}/payment`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body)
+    }).then(response => {
+      console.log("PAYMENT SUCCESS ", response);
+
+      const { status } = response;
+      console.log("STATUS ", status);
+      if (status === 200) {
+        // Clear cart & perform force reload
+        performEmptyCart(() => {
+          setReload(!reload)
+        })
+      }
+
+
+      //TODO: Create order
+      //  then clear cart
+    }).catch(error => {
+      console.log("PAYMENT EROOR ", error);
+
+    })
+  }
+  //  REACT_APP_BACKEND;
+
   const showStripeButton = () => {
     return isAuthenticated() ? (
-      <button className="btn btn-success">Pay with Stripe </button>
+      <ReactStripeCheckout
+        stripeKey={`${process.env.REACT_APP_PUBLIC_KEY}`}
+        token={makePayment}
+        amount={getFinalAmount() * 100}
+        name="Buy Here"
+      // shippingAddress
+      // billingAddress
+      >
+        <button className="btn btn-success">Pay with Stripe </button>
+      </ReactStripeCheckout>
     ) : (
-      <Link to="/signin">
-        <button className="btn btn-warning"> Signin </button>
-      </Link>
-    );
+        <Link to="/signin">
+          <button className="btn btn-warning"> Signin </button>
+        </Link>
+      );
   };
 
-  const errorMessage = () => {};
+  const errorMessage = () => { };
 
   return (
     <div>
